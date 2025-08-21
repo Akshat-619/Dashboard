@@ -5,12 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Invoice Dashboard — Static (CSS modal)</title>
 
-  <!-- Font Awesome (icons only; no SVGs) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="style.css">
-  <style>
-   
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -87,7 +83,6 @@
       <section class="table-wrapper" aria-label="invoice table">
         <div class="table-header">
           <h2>Bill Information</h2>
-          <!-- this link opens the modal by targeting #addModal -->
           <a href="#addModal" class="btn" title="Add new invoice">+ Add Invoice</a>
         </div>
 
@@ -160,18 +155,12 @@
     </main>
   </div>
 
-  <!-- ============================
-       Modal: opened by linking to #addModal
-       Works without JavaScript via :target
-       ============================ -->
   <div id="addModal" class="modal" aria-hidden="true">
     <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <!-- close link - set hash back to empty to hide modal -->
       <a class="modal-close" href="#" aria-label="Close modal">&times;</a>
 
       <h2 id="modalTitle">Add Invoice</h2>
 
-      <!-- simple two-column form -->
       <div class="form-grid">
         <input type="text" placeholder="Client Name" aria-label="Client name">
         <input type="text" placeholder="Related To (Company)" aria-label="Related to">
