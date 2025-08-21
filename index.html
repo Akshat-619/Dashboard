@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Invoice Dashboard — Static (CSS modal)</title>
+
+  <!-- Font Awesome (icons only; no SVGs) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* --------------------
+       Simple reset + base
+       -------------------- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f8fb;
+      color: #1f2937;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* --------------------
+       Layout: sidebar + main
+       -------------------- */
+    .wrapper {
+      display: flex;
+      min-height: 100vh;
+      gap: 0;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: #ffffff;
+      padding: 24px;
+      border-right: 1px solid #eceff4;
+      box-shadow: 0 2px 8px rgba(16,24,40,0.04);
+    }
+    .logo { font-size: 20px; color: #1e40af; font-weight:700; display:flex;gap:8px; align-items:center; }
+    .logo i { font-size:20px; }
+
+    .nav {
+      margin-top:22px;
+    }
+    .nav a {
+      display:flex;
+      gap:10px;
+      align-items:center;
+      padding:10px 12px;
+      color:#374151;
+      text-decoration:none;
+      border-radius:8px;
+      margin-bottom:8px;
+    }
+    .nav a i { width:20px; text-align:center; }
+    .nav a.active, .nav a:hover {
+      background:#eff6ff;
+      color:#1e40af;
+      font-weight:600;
+    }
+
+    /* --------------------
+       Main column
+       -------------------- */
+    .main {
+      flex: 1;                        /* expands to fill remaining space */
+      padding: 22px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    /* Header */
+    .header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:#fff;
+      padding:12px 16px;
+      border-radius:10px;
+      box-shadow: 0 2px 6px rgba(16,24,40,0.04);
+    }
+    .header h1 { font-size:18px; color:#111827; }
+    .header-right { display:flex; align-items:center; gap:14px; }
+
+    .search {
+      display:flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 12px;
+      background:#fbfdff;
+      border:1px solid #e6eef8;
+      border-radius:999px;
+      min-width:220px;
+    }
+    .search input {
+      border:0; outline:none; background:transparent; width:100%;
+      font-size:14px; color:#111827;
+    }
+    .icons { display:flex; align-items:center; gap:12px; color:#374151; font-size:18px; }
+    .icons i { cursor:pointer; }
+    .user-dot {
+      width:36px; height:36px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center; font-weight:700;
+      background:linear-gradient(135deg,#c7d2fe,#a5b4fc); color:#1e40af;
+    }
+
+    /* --------------------
+       Stat cards (grid)
+       -------------------- */
+    .cards {
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap:16px;
+    }
+    .card {
+      background:#fff;
+      padding:16px;
+      border-radius:10px;
+      box-shadow: 0 2px 6px rgba(16,24,40,0.04);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+    .card .left { display:flex; flex-direction:column; gap:6px; }
+    .card .left .label { color:#6b7280; font-size:13px }
+    .card .left .value { font-weight:700; font-size:18px; color:#0f172a }
+    .card .icon {
+      width:46px; height:46px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+      background:#eef2ff; color:#1e40af; font-size:18px;
+    }
+
+    /* --------------------
+       Table area
+       -------------------- */
+    .table-wrapper {
+      flex:1;                       /* allow table area to grow vertically */
+      background:#fff;
+      padding:16px;
+      border-radius:10px;
+      box-shadow: 0 2px 6px rgba(16,24,40,0.04);
+      overflow:auto;
+    }
+    .table-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    .btn {
+      display:inline-block;
+      background:#1e40af;
+      color:#fff;
+      padding:8px 14px;
+      border-radius:8px;
+      text-decoration:none;
+      font-weight:600;
+      border:0;
+      cursor:pointer;
+    }
+
+    table.styled {
+      width:100%;
+      border-collapse:collapse;
+      font-size:14px;
+      min-width:720px; /* allow horizontal scroll on smaller screens */
+    }
+    table.styled thead tr { background:#f8fafc; }
+    table.styled th, table.styled td {
+      padding:12px 10px; text-align:left; border-bottom:1px solid #f1f5f9;
+      vertical-align:middle;
+    }
+    .avatar { width:40px; height:40px; border-radius:50%; object-fit:cover; vertical-align:middle; }
+    .name-block { display:flex; align-items:center; gap:10px; }
+
+    /* status badges */
+    .badge {
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      color:#fff;
+      font-weight:600;
+      font-size:12px;
+    }
+    .badge.open { background:#ef4444; }       /* red */
+    .badge.completed { background:#6d28d9; }  /* purple */
+    .badge.started { background:#2563eb; }    /* blue */
+    .badge.notstarted { background:#fb923c; } /* orange */
+
+    /* --------------------
+       Modal (pure CSS :target)
+       -------------------- */
+    /* default hidden */
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(2,6,23,0.5);
+      padding: 20px;
+      z-index: 200;
+    }
+    /* when targeted, show it */
+    .modal:target { display:flex; }
+
+    .modal-box {
+      width: 820px;
+      max-width: 100%;
+      background: #fff;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.25);
+      max-height: 90vh;
+      overflow:auto;
+      position:relative;
+    }
+    .modal-close {
+      position:absolute;
+      right:12px; top:10px;
+      text-decoration:none;
+      font-size:22px;
+      color:#374151;
+    }
+    .modal h2 { margin-bottom:12px; font-size:18px; color:#0f172a; }
+    .form-grid {
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:10px;
+      margin-bottom:14px;
+    }
+    .form-grid input, .form-grid select {
+      padding:10px;
+      border-radius:8px;
+      border:1px solid #e6eef8;
+      font-size:14px;
+    }
+    .modal .submit {
+      background:#1e40af; color:#fff; padding:8px 14px; border-radius:8px; border:0; font-weight:700; cursor:pointer;
+    }
+
+    /* small modal table */
+    .modal table {
+      width:100%; border-collapse:collapse; margin-top:12px;
+    }
+    .modal th, .modal td { padding:10px; border-bottom:1px solid #eef2f8; font-size:14px; text-align:left; }
+
+    /* --------------------
+       Responsive tweaks
+       -------------------- */
+    @media (max-width: 900px) {
+      .sidebar { display:none; }
+      .main { padding:14px; }
+      .search { min-width:120px; }
+      .cards { grid-template-columns:repeat(auto-fit, minmax(140px,1fr)); }
+      table.styled { min-width: 0; }
+    }
+
+    @media (max-width: 520px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .header h1 { font-size:16px; }
+      .icons { font-size:16px; gap:8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo"><i class="fa-solid fa-building-columns"></i> InvoicePanel</div>
+
+      <nav class="nav" aria-label="main navigation">
+        <a href="#" class="active"><i class="fa-solid fa-house"></i> Dashboard</a>
+        <a href="#"><i class="fa-solid fa-file-invoice"></i> Invoices</a>
+        <a href="#"><i class="fa-solid fa-chart-line"></i> Reports</a>
+        <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+        <a href="#"><i class="fa-solid fa-question-circle"></i> Help</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <!-- HEADER -->
+      <header class="header">
+        <h1>Invoice</h1>
+
+        <div class="header-right">
+          <div class="search" role="search">
+            <i class="fa-solid fa-magnifying-glass" style="color:#6b7280"></i>
+            <input type="text" placeholder="Search invoices, clients..." aria-label="Search">
+          </div>
+
+          <div class="icons" aria-hidden="true">
+            <i class="fa-regular fa-bell"></i>
+            <i class="fa-regular fa-moon"></i>
+            <div class="user-dot">S</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- STAT CARDS -->
+      <section class="cards" aria-label="statistics">
+        <div class="card">
+          <div class="left">
+            <div class="label">Total Views</div>
+            <div class="value">34,554</div>
+          </div>
+          <div class="icon"><i class="fa-solid fa-eye"></i></div>
+        </div>
+
+        <div class="card">
+          <div class="left">
+            <div class="label">Total Profit</div>
+            <div class="value">$12,430</div>
+          </div>
+          <div class="icon"><i class="fa-solid fa-wallet"></i></div>
+        </div>
+
+        <div class="card">
+          <div class="left">
+            <div class="label">Total Products</div>
+            <div class="value">1,240</div>
+          </div>
+          <div class="icon"><i class="fa-solid fa-box"></i></div>
+        </div>
+
+        <div class="card">
+          <div class="left">
+            <div class="label">Total Users</div>
+            <div class="value">4,520</div>
+          </div>
+          <div class="icon"><i class="fa-solid fa-users"></i></div>
+        </div>
+      </section>
+
+      <!-- TABLE PANEL -->
+      <section class="table-wrapper" aria-label="invoice table">
+        <div class="table-header">
+          <h2>Bill Information</h2>
+          <!-- this link opens the modal by targeting #addModal -->
+          <a href="#addModal" class="btn" title="Add new invoice">+ Add Invoice</a>
+        </div>
+
+        <table class="styled" aria-describedby="Bill information table">
+          <thead>
+            <tr>
+              <th><input type="checkbox" aria-label="select all"></th>
+              <th>Client Name</th>
+              <th>Related To</th>
+              <th>Close Date</th>
+              <th>Contact Name</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td><input type="checkbox" /></td>
+              <td>
+                <div class="name-block">
+                  <img src="https://st.depositphotos.com/1011643/1248/i/450/depositphotos_12485614-stock-photo-asian-businesswoman-with-tablet-computer.jpg" alt="Shreya" class="avatar">
+                  <div>
+                    <div style="font-weight:700">Shreya Jain</div>
+                    <div style="font-size:12px;color:#6b7280">Nextwave Multimedia</div>
+                  </div>
+                </div>
+              </td>
+              <td>Nextwave Multimedia</td>
+              <td>Jul 21, 2023</td>
+              <td>Shreya Jain</td>
+              <td><span class="badge open">Open</span></td>
+            </tr>
+
+            <tr>
+              <td><input type="checkbox" checked /></td>
+              <td>
+                <div class="name-block">
+                  <img src="https://img.freepik.com/premium-photo/portrait-indian-businesswoman-white-background-holding-laptop_665346-22333.jpg" alt="Astha" class="avatar">
+                  <div>
+                    <div style="font-weight:700">Astha Wakhare</div>
+                    <div style="font-size:12px;color:#6b7280">Nvedia</div>
+                  </div>
+                </div>
+              </td>
+              <td>Nvedia</td>
+              <td>July 5, 2022</td>
+              <td>Astha Wakhare</td>
+              <td><span class="badge completed">Completed</span></td>
+            </tr>
+
+            <tr>
+              <td><input type="checkbox" /></td>
+              <td>
+                <div class="name-block">
+                  <img src="https://tse3.mm.bing.net/th/id/OIP.iCrHm3w6gi4Lg0iP250QyQHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Siddhart" class="avatar">
+                  <div>
+                    <div style="font-weight:700">Siddhart Sharma</div>
+                    <div style="font-size:12px;color:#6b7280">IBM</div>
+                  </div>
+                </div>
+              </td>
+              <td>IBM</td>
+              <td>Jul 01, 2022</td>
+              <td>Siddhart Sharma</td>
+              <td><span class="badge started">Started</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <!-- ============================
+       Modal: opened by linking to #addModal
+       Works without JavaScript via :target
+       ============================ -->
+  <div id="addModal" class="modal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <!-- close link - set hash back to empty to hide modal -->
+      <a class="modal-close" href="#" aria-label="Close modal">&times;</a>
+
+      <h2 id="modalTitle">Add Invoice</h2>
+
+      <!-- simple two-column form -->
+      <div class="form-grid">
+        <input type="text" placeholder="Client Name" aria-label="Client name">
+        <input type="text" placeholder="Related To (Company)" aria-label="Related to">
+        <input type="date" aria-label="Close date">
+        <input type="text" placeholder="Contact Name" aria-label="Contact name">
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
+        <select aria-label="Status" style="padding:10px;border-radius:8px;border:1px solid #e6eef8;">
+          <option>Open</option>
+          <option>Started</option>
+          <option>Completed</option>
+          <option>Not started</option>
+        </select>
+        <button class="submit" style="padding:10px 14px;border-radius:8px;border:0;background:#1e40af;color:#fff;font-weight:700;">Save (static)</button>
+      </div>
+
+      <h3 style="margin-top:10px;margin-bottom:6px;">Form Data (preview)</h3>
+
+      <table>
+        <thead>
+          <tr><th>Client</th><th>Company</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Example Client</td><td>Example Co.</td><td>Open</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</body>
+</html>
