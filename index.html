@@ -3,19 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Invoice Dashboard — Static (CSS modal)</title>
-
+  <title>Invoice Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <div class="wrapper">
-    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="logo"><i class="fa-solid fa-building-columns"></i> InvoicePanel</div>
-
-      <nav class="nav" aria-label="main navigation">
+      <nav class="nav">
         <a href="#" class="active"><i class="fa-solid fa-house"></i> Dashboard</a>
         <a href="#"><i class="fa-solid fa-file-invoice"></i> Invoices</a>
         <a href="#"><i class="fa-solid fa-chart-line"></i> Reports</a>
@@ -24,19 +20,15 @@
       </nav>
     </aside>
 
-    <!-- MAIN -->
     <main class="main">
-      <!-- HEADER -->
       <header class="header">
         <h1>Invoice</h1>
-
         <div class="header-right">
-          <div class="search" role="search">
+          <div class="search">
             <i class="fa-solid fa-magnifying-glass" style="color:#6b7280"></i>
-            <input type="text" placeholder="Search invoices, clients..." aria-label="Search">
+            <input type="text" placeholder="Search invoices, clients...">
           </div>
-
-          <div class="icons" aria-hidden="true">
+          <div class="icons">
             <i class="fa-regular fa-bell"></i>
             <i class="fa-regular fa-moon"></i>
             <div class="user-dot">S</div>
@@ -44,8 +36,7 @@
         </div>
       </header>
 
-      <!-- STAT CARDS -->
-      <section class="cards" aria-label="statistics">
+      <section class="cards">
         <div class="card">
           <div class="left">
             <div class="label">Total Views</div>
@@ -79,17 +70,16 @@
         </div>
       </section>
 
-      <!-- TABLE PANEL -->
-      <section class="table-wrapper" aria-label="invoice table">
+      <section class="table-wrapper">
         <div class="table-header">
           <h2>Bill Information</h2>
-          <a href="#addModal" class="btn" title="Add new invoice">+ Add Invoice</a>
+          <a href="#addModal" class="btn">+ Add Invoice</a>
         </div>
 
-        <table class="styled" aria-describedby="Bill information table">
+        <table class="styled">
           <thead>
             <tr>
-              <th><input type="checkbox" aria-label="select all"></th>
+              <th><input type="checkbox"></th>
               <th>Client Name</th>
               <th>Related To</th>
               <th>Close Date</th>
@@ -100,7 +90,7 @@
 
           <tbody>
             <tr>
-              <td><input type="checkbox" /></td>
+              <td><input type="checkbox"></td>
               <td>
                 <div class="name-block">
                   <img src="https://st.depositphotos.com/1011643/1248/i/450/depositphotos_12485614-stock-photo-asian-businesswoman-with-tablet-computer.jpg" alt="Shreya" class="avatar">
@@ -117,7 +107,7 @@
             </tr>
 
             <tr>
-              <td><input type="checkbox" checked /></td>
+              <td><input type="checkbox" checked></td>
               <td>
                 <div class="name-block">
                   <img src="https://img.freepik.com/premium-photo/portrait-indian-businesswoman-white-background-holding-laptop_665346-22333.jpg" alt="Astha" class="avatar">
@@ -134,7 +124,7 @@
             </tr>
 
             <tr>
-              <td><input type="checkbox" /></td>
+              <td><input type="checkbox"></td>
               <td>
                 <div class="name-block">
                   <img src="https://tse3.mm.bing.net/th/id/OIP.iCrHm3w6gi4Lg0iP250QyQHaLH?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Siddhart" class="avatar">
@@ -155,41 +145,41 @@
     </main>
   </div>
 
-  <div id="addModal" class="modal" aria-hidden="true">
-    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <a class="modal-close" href="#" aria-label="Close modal">&times;</a>
-
-      <h2 id="modalTitle">Add Invoice</h2>
-
-      <div class="form-grid">
-        <input type="text" placeholder="Client Name" aria-label="Client name">
-        <input type="text" placeholder="Related To (Company)" aria-label="Related to">
-        <input type="date" aria-label="Close date">
-        <input type="text" placeholder="Contact Name" aria-label="Contact name">
+  <div id="addModal" class="modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Add Invoice</h2>
+        <a class="modal-close" href="#">&times;</a>
       </div>
 
-      <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
-        <select aria-label="Status" style="padding:10px;border-radius:8px;border:1px solid #e6eef8;">
-          <option>Open</option>
-          <option>Started</option>
-          <option>Completed</option>
-          <option>Not started</option>
-        </select>
-        <button class="submit" style="padding:10px 14px;border-radius:8px;border:0;background:#1e40af;color:#fff;font-weight:700;">Save (static)</button>
+      <div class="modal-body">
+        <div class="form-grid">
+          <input type="text" placeholder="Client Name">
+          <input type="text" placeholder="Related To (Company)">
+          <input type="date">
+          <input type="text" placeholder="Contact Name">
+        </div>
+
+        <div style="display:flex;gap:12px;align-items:center;">
+          <select>
+            <option>Open</option>
+            <option>Started</option>
+            <option>Completed</option>
+            <option>Not started</option>
+          </select>
+          <button class="submit">Save</button>
+        </div>
+
+        <table class="preview-table">
+          <thead>
+            <tr><th>Client</th><th>Company</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Example Client</td><td>Example Co.</td><td>Open</td></tr>
+          </tbody>
+        </table>
       </div>
-
-      <h3 style="margin-top:10px;margin-bottom:6px;">Form Data (preview)</h3>
-
-      <table>
-        <thead>
-          <tr><th>Client</th><th>Company</th><th>Status</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Example Client</td><td>Example Co.</td><td>Open</td></tr>
-        </tbody>
-      </table>
     </div>
   </div>
-
 </body>
 </html>
